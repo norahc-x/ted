@@ -1,0 +1,6 @@
+# build artifacts
+ted
+*.o
+
+# atomic-save temp files (only left behind by a crash)
+.ted.*
