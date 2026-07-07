@@ -1,5 +1,6 @@
 # ted — a tiny terminal code editor with a file tree
 
+![ted — code editor with file tree in the terminal](assets/ted.png)
 
 I was tired of VS Code and wanted something I could use directly from the terminal,
 combining the simplicity of the classic terminal editors with the intuitiveness of VS Code. So I created ted. 
