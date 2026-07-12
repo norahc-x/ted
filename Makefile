@@ -17,7 +17,13 @@ asan:
 memcheck: ted
 	valgrind --leak-check=full --show-leak-kinds=all ./ted
 
+test: ted
+	sh tests/run.sh
+
+test-asan: asan
+	sh tests/run.sh
+
 clean:
 	rm -f ted $(OBJ)
 
-.PHONY: asan memcheck clean
+.PHONY: asan memcheck test test-asan clean

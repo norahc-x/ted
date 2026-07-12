@@ -17,6 +17,8 @@ AddressSanitizer + LeakSanitizer + UBSan with zero findings.
 ## Build
 
     make            # optimized binary ./ted
+    make test       # end-to-end regression suite (needs python3; see tests/)
+    make test-asan  # same suite under ASan/UBSan — the memory audit
     make asan       # instrumented build (ASan + UBSan) for development
     make memcheck   # run under valgrind, if installed
 
