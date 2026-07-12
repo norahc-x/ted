@@ -20,7 +20,7 @@
 
 #define TED_VERSION "0.1.0"
 #define TAB_WIDTH   4  /* render width of \t and soft-tab size */
-#define TREE_WIDTH  28 /* columns of the file tree pane */
+#define TREE_MIN    20 /* minimum columns of the file tree pane */
 #define QUIT_TIMES  1  /* extra Ctrl-Q/Ctrl-W presses with unsaved changes */
 
 #define CTRL_KEY(k) ((k) & 0x1f)
@@ -88,6 +88,8 @@ struct ebuf {               /* one open file */
     int chain;              /* 0 off, 1 chain from next push, 2 chaining */
     int sel_active;         /* selection spans anchor..cursor */
     int sel_ay, sel_ax;     /* selection anchor (chars coords) */
+    int wrap;               /* soft-wrap long lines (auto-on for plain text) */
+    int segoff;             /* wrap: first visible segment of row rowoff */
 };
 
 struct tnode {              /* file tree node */
@@ -115,6 +117,7 @@ struct editorConfig {
     struct vitem *vis;          /* flattened visible tree entries */
     int nvis, viscap;
     int treesel, treeoff;       /* tree selection and scroll */
+    int treew;                  /* widest visible tree entry, in columns */
     int show_tree, show_hidden;
     int focus;                  /* FOCUS_EDITOR or FOCUS_TREE */
     char statusmsg[128];

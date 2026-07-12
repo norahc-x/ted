@@ -509,6 +509,7 @@ static struct ebuf *bufOpen(const char *path) {
         fclose(fp);
     }
     editorSelectSyntaxHighlight(b);
+    b->wrap = (b->syntax == NULL); /* soft-wrap prose, scroll code */
     b->dirty = 0;
     return b;
 }

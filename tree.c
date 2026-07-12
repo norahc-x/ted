@@ -111,8 +111,16 @@ static void treeEnsureVisible(void) {
 }
 
 void treeFlatten(void) {
+    int i, w = TREE_MIN;
     E.nvis = 0;
     if (E.root) flattenRec(E.root, 0);
+    /* pane width = widest visible entry; skip the root, whose long path
+     * would inflate the pane (it gets an ellipsis instead) */
+    for (i = 1; i < E.nvis; i++) {
+        int c = 3 + E.vis[i].depth * 2 + (int)strlen(E.vis[i].node->name);
+        if (c > w) w = c;
+    }
+    E.treew = w;
     treeEnsureVisible();
 }
 

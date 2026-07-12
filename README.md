@@ -10,7 +10,7 @@ A minimal code editor for the terminal, architecturally derived from
 Plain C99, POSIX + VT100 escape sequences, **zero dependencies** — no ncurses.
 Runs on Linux, WSL, macOS and the BSDs.
 
-~2,550 lines across six small modules, each with a single owner for every
+~2,750 lines across six small modules, each with a single owner for every
 allocation. The exit path frees everything: the test suite runs under
 AddressSanitizer + LeakSanitizer + UBSan with zero findings.
 
@@ -36,6 +36,7 @@ AddressSanitizer + LeakSanitizer + UBSan with zero findings.
 | `Ctrl-R`         | search & replace: `y` this, `n` skip, `a` all, `q` stop |
 | `Ctrl-G`         | go to line                                    |
 | `Ctrl-Z` / `Ctrl-Y` | undo / redo (typed/deleted runs as one step) |
+| `Ctrl-E`         | toggle soft line wrap (auto-on for plain-text files) |
 | `Ctrl-←` / `Ctrl-→` | move by word                               |
 | `Ctrl-↑` / `Ctrl-↓` | jump to previous / next blank line         |
 | `Ctrl-Del` / `Ctrl-Backspace` | delete word after / before cursor |
@@ -51,7 +52,15 @@ AddressSanitizer + LeakSanitizer + UBSan with zero findings.
 In the tree: arrows move (`←` collapses / jumps to parent, `→` expands),
 `Enter` opens, `R` re-scans the selected directory, `.` toggles hidden files,
 `n` creates a file (written to disk on first save), `N` creates a directory.
-Newly saved files appear in the tree automatically.
+Newly saved files appear in the tree automatically. The pane sizes itself
+to the widest visible entry (up to 40% of the terminal), so deeply nested
+names stay readable; anything that still doesn't fit ends in `…`.
+
+Long lines soft-wrap for plain-text buffers (anything without syntax
+highlighting: `.txt`, `.md`, logs, …) so prose is always fully readable;
+code files scroll horizontally as usual, and `Ctrl-E` flips either mode
+per buffer. Wrapped continuation lines get a blank gutter, and `↑`/`↓`
+move by visual line inside a wrapped row.
 
 Editing: auto-indent on Enter, Tab inserts spaces (width 4, `TAB_WIDTH` in
 `editor.h`), bracketed paste keeps pasted text verbatim. Syntax highlighting
