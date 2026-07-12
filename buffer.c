@@ -449,6 +449,28 @@ void bufDeleteRange(struct ebuf *b, int sy, int sx, int ey, int ex) {
     b->cy = sy;
 }
 
+/* Move rows [y1..y2] one step up (dir < 0) or down as one undo group:
+ * the adjacent row is relocated to the other side of the block.
+ * Returns 0 at a buffer boundary. */
+int bufMoveLines(struct ebuf *b, int y1, int y2, int dir) {
+    struct erow *row;
+    char *s;
+    int n, src, dst;
+    if (y1 < 0 || y2 >= b->numrows || y1 > y2) return 0;
+    if (dir < 0) { src = y1 - 1; dst = y2; }
+    else         { src = y2 + 1; dst = y1; }
+    if (src < 0 || src >= b->numrows) return 0;
+    row = &b->rows[src];
+    n = row->size;
+    s = xmemdup(row->chars, n);
+    undoPush(b, UROWD, src, 0, n, xmemdup(row->chars, n), 0);
+    bufDelRow(b, src);
+    undoPush(b, UROWI, dst, 0, 0, NULL, 1);
+    bufInsertRow(b, dst, s, n);
+    free(s);
+    return 1;
+}
+
 /* The text in [sy,sx)..(ey,ex), '\n'-joined; caller frees. */
 char *bufGetRange(struct ebuf *b, int sy, int sx, int ey, int ex, size_t *n) {
     size_t len;

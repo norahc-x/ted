@@ -10,7 +10,7 @@ A minimal code editor for the terminal, architecturally derived from
 Plain C99, POSIX + VT100 escape sequences, **zero dependencies** — no ncurses.
 Runs on Linux, WSL, macOS and the BSDs.
 
-~2,750 lines across six small modules, each with a single owner for every
+~2,800 lines across six small modules, each with a single owner for every
 allocation. The exit path frees everything: the test suite runs under
 AddressSanitizer + LeakSanitizer + UBSan with zero findings.
 
@@ -41,6 +41,7 @@ AddressSanitizer + LeakSanitizer + UBSan with zero findings.
 | `Ctrl-E`         | toggle soft line wrap (auto-on for plain-text files) |
 | `Ctrl-←` / `Ctrl-→` | move by word                               |
 | `Ctrl-↑` / `Ctrl-↓` | jump to previous / next blank line         |
+| `Alt-↑` / `Alt-↓` | move current line / selected block up or down |
 | `Ctrl-Del` / `Ctrl-Backspace` | delete word after / before cursor |
 | `Shift-arrows/Home/End` | select (add `Ctrl` for word-wise); `Esc` clears |
 | `Ctrl-L` / `Ctrl-A` | select line (repeat to extend) / select all |

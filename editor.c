@@ -1087,6 +1087,21 @@ void editorProcessKeypress(void) {
             }
         }
         break;
+    case ALT_ARROW_UP:
+    case ALT_ARROW_DOWN: /* move the current line or the selected block */
+        if (b) {
+            int y1, y2, x1, x2, dir = (c == ALT_ARROW_DOWN) ? 1 : -1;
+            if (selGet(b, &y1, &x1, &y2, &x2)) {
+                if (x2 == 0 && y2 > y1) y2--; /* col-0 end: line not included */
+                if (bufMoveLines(b, y1, y2, dir)) {
+                    b->sel_ay += dir; /* selection follows the block */
+                    b->cy += dir;
+                }
+            } else if (b->cy < b->numrows) {
+                if (bufMoveLines(b, b->cy, b->cy, dir)) b->cy += dir;
+            }
+        }
+        break;
     case CTRL_ARROW_LEFT:
     case CTRL_ARROW_RIGHT:
         if (b) {

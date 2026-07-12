@@ -31,6 +31,7 @@ enum ekey {
     BACKSPACE = 127,
     ARROW_LEFT = 1000, ARROW_RIGHT, ARROW_UP, ARROW_DOWN,
     CTRL_ARROW_LEFT, CTRL_ARROW_RIGHT, CTRL_ARROW_UP, CTRL_ARROW_DOWN,
+    ALT_ARROW_UP, ALT_ARROW_DOWN,
     HOME_KEY, END_KEY, PAGE_UP, PAGE_DOWN, DEL_KEY, CTRL_DEL_KEY,
     KEY_MOUSE, KEY_RESIZE, KEY_PASTE_BEGIN, KEY_PASTE_END
 };
@@ -147,6 +148,7 @@ void bufInsertNewline(struct ebuf *b, int autoindent);
 void bufDelChar(struct ebuf *b);
 void bufInsertText(struct ebuf *b, const char *s, size_t n);
 void bufDeleteRange(struct ebuf *b, int sy, int sx, int ey, int ex);
+int  bufMoveLines(struct ebuf *b, int y1, int y2, int dir);
 char *bufGetRange(struct ebuf *b, int sy, int sx, int ey, int ex, size_t *n);
 int  bufUndo(struct ebuf *b);
 int  bufRedo(struct ebuf *b);

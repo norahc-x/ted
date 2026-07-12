@@ -50,6 +50,9 @@ printf 'alpha\nbeta gamma\n'          > find.txt
 printf 'x\n' > a.txt; printf 'y\n'    > b.txt
 mkdir -p treedir projdir
 printf '1\n' > treedir/aaa.txt; printf '2\n' > treedir/bbb.txt
+printf 'one\ntwo\nthree\n'            > m1.txt
+printf 'aaa\nbbb\nccc\n'              > m2.txt
+printf 'one\ntwo\nthree\n'            > m3.txt
 i=1; while [ $i -le 100 ]; do echo "line$i"; i=$((i + 1)); done > g1.txt
 python3 -c "print('A'*74 + 'B'*74 + 'C'*52)" > long.txt
 
@@ -112,6 +115,15 @@ run goto '\x0750\rX\x13\x11' g1.txt &&                    # Ctrl-G line 50
 
 run replace '\x12cat\rdog\ryna\x13\x11' p1.txt &&         # y/n/a answers
     check replace p1.txt 'dog cat dog\ndog\n'
+
+run move '\x1b[1;3B\x1b[1;3B\x1b[1;3A\x13\x11' m1.txt &&  # Alt+Down x2, Up x1
+    check move m1.txt 'two\none\nthree\n'
+
+run move-sel '\x1b[1;2B\x1b[1;2B\x1b[1;3B\x1b[1;3B\x13\x11' m2.txt &&
+    check move-sel m2.txt 'ccc\naaa\nbbb\n'    # selected block: 2nd is no-op
+
+run move-undo '\x1b[1;3B\x1a\x13\x11' m3.txt &&           # one-step undo
+    check move-undo m3.txt 'one\ntwo\nthree\n'
 
 run wrap '\x1b[F\x1b[AX\x13\x18' long.txt &&              # visual arrow moves
     { python3 -c "import sys; s = open('long.txt').read(); sys.exit(0 if s.index('X') == 126 else 1)" \

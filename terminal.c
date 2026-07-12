@@ -91,7 +91,7 @@ static int readByte(char *c) {
 /* Decode one keypress; fills *m and returns KEY_MOUSE for mouse input. */
 int editorReadKey(struct mev *m) {
     char c, seq[2];
-    int p[3] = {0, 0, 0}, pi = 0, ctrl, shift, key = 0;
+    int p[3] = {0, 0, 0}, pi = 0, ctrl, shift, alt, key = 0;
     char fin = 0;
 
     if (!readByte(&c)) { resize_pending = 0; return KEY_RESIZE; }
@@ -136,9 +136,10 @@ int editorReadKey(struct mev *m) {
     }
     ctrl = p[1] >= 2 && ((p[1] - 1) & 4); /* xterm modifier: 1 + bitmask */
     shift = p[1] >= 2 && ((p[1] - 1) & 1);
+    alt = p[1] >= 2 && ((p[1] - 1) & 2);
     switch (fin) {
-    case 'A': key = ctrl ? CTRL_ARROW_UP : ARROW_UP; break;
-    case 'B': key = ctrl ? CTRL_ARROW_DOWN : ARROW_DOWN; break;
+    case 'A': key = ctrl ? CTRL_ARROW_UP : alt ? ALT_ARROW_UP : ARROW_UP; break;
+    case 'B': key = ctrl ? CTRL_ARROW_DOWN : alt ? ALT_ARROW_DOWN : ARROW_DOWN; break;
     case 'C': key = ctrl ? CTRL_ARROW_RIGHT : ARROW_RIGHT; break;
     case 'D': key = ctrl ? CTRL_ARROW_LEFT : ARROW_LEFT; break;
     case 'H': key = HOME_KEY; break;
